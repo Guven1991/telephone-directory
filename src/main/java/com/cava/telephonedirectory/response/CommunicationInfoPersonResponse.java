@@ -6,14 +6,12 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class CommunicationInfoResponse {
+public class CommunicationInfoPersonResponse {
 
     private Long id;
 
     private CommunicationInformationType communicationInformationType;
 
     private String informationContent;
-
-//    private PersonResponse person;
 
 }

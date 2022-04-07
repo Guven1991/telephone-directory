@@ -19,6 +19,7 @@ import java.util.Optional;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(MockitoJUnitRunner.class)
@@ -82,7 +83,12 @@ public class CommunicationInfoServiceTest {
         assertEquals(Optional.of(1L), Optional.ofNullable(returnedCommunicationInfoDto.getPerson().getId()));
         assertEquals("guven", returnedCommunicationInfoDto.getPerson().getUsername());
 
+    }
 
+    @Test
+    public void deleteCommunicationInfo(){
+        communicationInfoService.deleteCommunicationInfo(1L);
+        verify(communicationInfoRepository).deleteById(1L);
     }
 
 

@@ -2,8 +2,10 @@ package com.cava.telephonedirectory.controller;
 
 import com.cava.telephonedirectory.dto.PersonDto;
 import com.cava.telephonedirectory.request.PersonCreateRequest;
+import com.cava.telephonedirectory.response.PersonGetByIdResponse;
 import com.cava.telephonedirectory.response.PersonResponse;
 import com.cava.telephonedirectory.service.PersonService;
+import lombok.RequiredArgsConstructor;
 import org.dozer.DozerBeanMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -13,15 +15,12 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/person")
+@RequiredArgsConstructor
 public class PersonController {
 
     DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
-    private PersonService personService;
-
-    public PersonController(PersonService personService) {
-        this.personService = personService;
-    }
+    private final PersonService personService;
 
     @PostMapping
     public ResponseEntity<PersonResponse> createPerson(@RequestBody PersonCreateRequest personCreateRequest) {
@@ -29,6 +28,7 @@ public class PersonController {
 
         return ResponseEntity.ok(dozerBeanMapper.map(personService.createPerson(personDto), PersonResponse.class));
     }
+
     @GetMapping
     public ResponseEntity<List<PersonResponse>> getAllPersons(){
         List<PersonDto> personDtoList =personService.getAllPersons();
@@ -38,9 +38,9 @@ public class PersonController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<PersonResponse> getPersonById(@PathVariable("id") Long id){
+    public ResponseEntity<PersonGetByIdResponse> getPersonById(@PathVariable("id") Long id){
 
-       return ResponseEntity.ok(dozerBeanMapper.map(personService.getPersonById(id),PersonResponse.class));
+       return ResponseEntity.ok(dozerBeanMapper.map(personService.getPersonById(id),PersonGetByIdResponse.class));
     }
 
 //    @PutMapping("/{id}")

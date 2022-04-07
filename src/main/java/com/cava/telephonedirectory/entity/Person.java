@@ -3,7 +3,6 @@ package com.cava.telephonedirectory.entity;
 import lombok.*;
 
 import javax.persistence.*;
-import java.util.List;
 
 @Entity
 @Getter
@@ -28,7 +27,7 @@ public class Person {
     @Column(name = "company")
     private String company;
 
-    @OneToMany(mappedBy="person")
-    private List<CommunicationInfo> communicationInfoList;
+//    @OneToMany(mappedBy="person")
+//    private List<CommunicationInfo> communicationInfoList;
 
 }

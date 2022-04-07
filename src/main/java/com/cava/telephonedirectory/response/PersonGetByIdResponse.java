@@ -17,5 +17,5 @@ public class PersonGetByIdResponse {
 
     private String company;
 
-    private List<CommunicationInfoResponse> communicationInfoResponseList;
+    private List<CommunicationInfoPersonResponse> communicationInfoList;
 }

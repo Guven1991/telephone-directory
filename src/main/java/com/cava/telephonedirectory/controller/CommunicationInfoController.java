@@ -29,4 +29,10 @@ public class CommunicationInfoController {
 
         return ResponseEntity.ok(dozerBeanMapper.map(communicationInfoService.createCommunicationInfo(communicationInfoDto,personId), CommunicationInfoResponse.class));
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteCommunicationInfo(@PathVariable Long id){
+        communicationInfoService.deleteCommunicationInfo(id);
+    }
+
 }
