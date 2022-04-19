@@ -18,7 +18,7 @@ public class PersonService {
     private final PersonRepository personRepository;
     private final CommunicationInfoService communicationInfoService;
 
-    public PersonService(PersonRepository personRepository,@Lazy CommunicationInfoService communicationInfoService) {
+    public PersonService(PersonRepository personRepository, @Lazy CommunicationInfoService communicationInfoService) {
         this.personRepository = personRepository;
         this.communicationInfoService = communicationInfoService;
     }
@@ -26,7 +26,15 @@ public class PersonService {
     DozerBeanMapper dozerBeanMapper = new DozerBeanMapper();
 
     public PersonDto createPerson(PersonDto personDto) {
+        String personDtoUsername = personDto.getUsername().toUpperCase().trim();
+        String personDtoLastName = personDto.getLastname().toUpperCase().trim();
+        String personDtoCompany = personDto.getCompany().toUpperCase().trim();
+        personDto.setUsername(personDtoUsername);
+        personDto.setLastname(personDtoLastName);
+        personDto.setCompany(personDtoCompany);
+
         Person person = dozerBeanMapper.map(personDto, Person.class);
+
         Person personSaved = personRepository.save(person);
         return dozerBeanMapper.map(personSaved, PersonDto.class);
     }

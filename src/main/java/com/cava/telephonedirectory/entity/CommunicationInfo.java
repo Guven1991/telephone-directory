@@ -20,10 +20,10 @@ public class CommunicationInfo {
     private Long id;
 
     @Enumerated(EnumType.STRING)
-    @Column(name = "communicationInformationType")
+    @Column(name = "communication_information_type")
     private CommunicationInformationType communicationInformationType;
 
-    @Column(name = "informationContent")
+    @Column(name = "information_content")
     private String informationContent;
 
     @ManyToOne

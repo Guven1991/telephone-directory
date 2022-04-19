@@ -22,4 +22,5 @@ public class PersonDto {
     private String company;
 
     private List<CommunicationInfoDto> communicationInfoList;
+
 }
