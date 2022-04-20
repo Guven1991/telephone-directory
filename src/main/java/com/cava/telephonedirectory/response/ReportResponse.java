@@ -1,24 +1,25 @@
 package com.cava.telephonedirectory.response;
 
+import com.cava.telephonedirectory.model.LocationInfoModel;
 import com.cava.telephonedirectory.model.ReportStatus;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import java.time.LocalDateTime;
+import java.util.Date;
+import java.util.List;
 
-@Data
+
+@Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
+@Setter
 public class ReportResponse {
 
     private Long id;
 
-    private String location;
-
-    private Integer personCount;
-
-    private Integer phoneNumberCount;
-
-    private LocalDateTime requestDate;
+    private Date requestDate;
 
     private ReportStatus reportStatus;
+
+    private List<LocationInfoModel> locationInfoModelList;
 }

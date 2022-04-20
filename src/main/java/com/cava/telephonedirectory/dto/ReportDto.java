@@ -1,20 +1,26 @@
 package com.cava.telephonedirectory.dto;
 
-import com.cava.telephonedirectory.model.PersonCountLocationModel;
+import com.cava.telephonedirectory.model.LocationInfoModel;
 import com.cava.telephonedirectory.model.ReportStatus;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 
+@Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ReportDto {
 
     private Long id;
 
-    private List<PersonCountLocationModel> personCountLocationModelList;
-
-    private Integer phoneNumberCount;
-
-    private LocalDateTime requestDate;
+    private Date requestDate;
 
     private ReportStatus reportStatus;
+
+    private List<LocationInfoModel> locationInfoModelList;
 }

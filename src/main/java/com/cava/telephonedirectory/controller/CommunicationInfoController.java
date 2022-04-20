@@ -1,7 +1,7 @@
 package com.cava.telephonedirectory.controller;
 
 import com.cava.telephonedirectory.dto.CommunicationInfoDto;
-import com.cava.telephonedirectory.model.PersonCountLocationModel;
+import com.cava.telephonedirectory.model.LocationInfoModel;
 import com.cava.telephonedirectory.request.CommunicationInfoCreateRequest;
 import com.cava.telephonedirectory.response.CommunicationInfoResponse;
 import com.cava.telephonedirectory.service.CommunicationInfoService;
@@ -37,7 +37,7 @@ public class CommunicationInfoController {
     @GetMapping("/{location}")
     public ResponseEntity<List<CommunicationInfoResponse>> getCommunicationInfosByLocationContent(
             @PathVariable("location") String locationContent){
-        List<CommunicationInfoDto> communicationInfoDtoList = communicationInfoService.getCommunicationInfosByLocationContent(locationContent);
+        List<CommunicationInfoDto> communicationInfoDtoList = communicationInfoService.getCommunicationInfosByLocation(locationContent);
 
        return ResponseEntity.ok(communicationInfoDtoList.stream()
                .map(communicationInfoDto ->
@@ -47,13 +47,14 @@ public class CommunicationInfoController {
     }
 
     @GetMapping("/personCountByLocation")
-    public ResponseEntity<List<PersonCountLocationModel>> getLocationCount(){
-        return ResponseEntity.ok(communicationInfoService.getLocationCount());
+    public ResponseEntity<List<LocationInfoModel>> getPersonCountByLocation(){
+        return ResponseEntity.ok(communicationInfoService.getPersonCountByLocation());
     }
 
-    @GetMapping("/phoneNumberCountByLocation")
-    public void getPhoneNumberCount(){
-        communicationInfoService.getPhoneNumberCount();
+    @GetMapping("/locationInfoModel")
+    public ResponseEntity<List<LocationInfoModel>> getPhoneNumberCount(){
+
+        return ResponseEntity.ok(communicationInfoService.getLocationInfo());
     }
 
 

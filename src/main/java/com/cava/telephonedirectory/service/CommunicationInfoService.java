@@ -4,12 +4,13 @@ import com.cava.telephonedirectory.dto.CommunicationInfoDto;
 import com.cava.telephonedirectory.dto.PersonDto;
 import com.cava.telephonedirectory.entity.CommunicationInfo;
 import com.cava.telephonedirectory.model.CommunicationInformationType;
-import com.cava.telephonedirectory.model.PersonCountLocationModel;
+import com.cava.telephonedirectory.model.LocationInfoModel;
 import com.cava.telephonedirectory.repository.CommunicationInfoRepository;
 import org.dozer.DozerBeanMapper;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,23 +49,14 @@ public class CommunicationInfoService {
 
     }
 
-    public List<CommunicationInfoDto> getCommunicationInfosByLocationContent(String locationContent) {
+    public List<CommunicationInfoDto> getCommunicationInfosByLocation(String location) {
 
         List<CommunicationInfo> communicationInfoList = communicationInfoRepository
-                .getCommunicationInfosByCommunicationInformationTypeAndInformationContent(CommunicationInformationType.LOCATION, locationContent);
+                .getCommunicationInfosByCommunicationInformationTypeAndInformationContent(CommunicationInformationType.LOCATION, location);
         return communicationInfoList.stream().map(communicationInfo ->
                 dozerBeanMapper.map(communicationInfo, CommunicationInfoDto.class)).collect(Collectors.toList());
 
     }
-
-//    public List<CommunicationInfoDto> getCommunicationInfosByPhoneNumberContent(String locationContent) {
-//
-//        List<CommunicationInfo> communicationInfoList = communicationInfoRepository
-//                .getCommunicationInfosByCommunicationInformationTypeAndInformationContent(CommunicationInformationType.PHONE_NUMBER, locationContent);
-//        return communicationInfoList.stream().map(communicationInfo ->
-//                dozerBeanMapper.map(communicationInfo, CommunicationInfoDto.class)).collect(Collectors.toList());
-//
-//    }
 
     public List<CommunicationInfoDto> getAllCommunicationInfoByPersonId(Long id) {
         List<CommunicationInfo> communicationInfoList = communicationInfoRepository.getCommunicationInfosByPerson_Id(id);
@@ -77,56 +69,41 @@ public class CommunicationInfoService {
         communicationInfoRepository.deleteById(id);
     }
 
-    public List<PersonCountLocationModel> getLocationCount() {
-        List<PersonCountLocationModel> personCountLocationModelList = communicationInfoRepository.getLocationCount();
-        return personCountLocationModelList;
+    public List<LocationInfoModel> getPersonCountByLocation() {
+        return communicationInfoRepository.getPersonCountByLocation();
     }
 
-    public void getPhoneNumberCount() {
+    public List<LocationInfoModel> getLocationInfo() {
 
-        Integer phoneCount = 0;
+        Long phoneCount = 0L;
 
-        List<PersonCountLocationModel> personCountLocationModelList = getLocationCount();
+        List<LocationInfoModel> locationInfoModelList = new ArrayList<>();
+        List<LocationInfoModel> personCountLocationModelList = getPersonCountByLocation();
 
-        for (int i = 0; i < personCountLocationModelList.size(); i++) {
+        for (LocationInfoModel locationInfoModel : personCountLocationModelList) {
 
-            String cityName = personCountLocationModelList
-                    .get(i)
-                    .getInformationContent();
+            String location = locationInfoModel.getLocation();
+            List<CommunicationInfoDto> communicationInfoDtoList = getCommunicationInfosByLocation(location);
 
-            List<CommunicationInfoDto> communicationInfoDtoList = getCommunicationInfosByLocationContent(personCountLocationModelList
-                    .get(i)
-                    .getInformationContent());
+            for (CommunicationInfoDto communicationInfoDto : communicationInfoDtoList) {
 
-            for (int j = 0; j < communicationInfoDtoList.size(); j++) {
+                List<CommunicationInfoDto> communicationInfoDtoListForPerson = personService
+                        .getPersonById(communicationInfoDto.getPerson().getId()).getCommunicationInfoList();
 
-                List<CommunicationInfoDto> communicationInfoDtoList1 = personService.getPersonById(communicationInfoDtoList.get(j).getPerson().getId()).getCommunicationInfoList();
+                for (CommunicationInfoDto info : communicationInfoDtoListForPerson) {
 
-                for (int k = 0; k < communicationInfoDtoList1.size(); k++) {
-
-                    if (communicationInfoDtoList1.get(k).getCommunicationInformationType().equals(CommunicationInformationType.PHONE_NUMBER)) {
+                    if (info.getCommunicationInformationType().equals(CommunicationInformationType.PHONE_NUMBER)) {
                         phoneCount++;
                     }
                 }
             }
-//            todo hashmap ile sakla
-            System.out.println(cityName + " : " + phoneCount);
-            phoneCount=0;
-        }
 
-//        personCountLocationModelList.stream().map(p -> {
-//            List<CommunicationInfoDto> communicationInfoDtoList = getCommunicationInfosByLocationContent(p.getInformationContent());
-//            List<CommunicationInfo> communicationInfoDtos = new ArrayList<>();
-//            communicationInfoDtos = communicationInfoDtoList.stream().map(c -> {
-//                personService.getPersonById(c.getPerson().getId()).getCommunicationInfoList().stream()
-//                        .filter(ci -> ci.getCommunicationInformationType().equals(CommunicationInformationType.PHONE_NUMBER))
-//                        .collect(Collectors.toList());
-//
-//                communicationInfoDtos.size();
-//            });
-//
-//            List<CommunicationInfoDto> communicationInfoDtoList = getCommunicationInfosByLocationContent()
-//            List<PhoneNumberCountByLocation> phoneNumberCountByLocationList = communicationInfoRepository.getPhoneNumberCount();
-//            return phoneNumberCountByLocationList;
+            locationInfoModel.setPhoneNumberCount(phoneCount);
+            locationInfoModelList.add(locationInfoModel);
+
+            phoneCount = 0L;
         }
+        return locationInfoModelList;
     }
+
+}
