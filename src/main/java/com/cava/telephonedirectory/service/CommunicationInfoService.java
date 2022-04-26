@@ -22,6 +22,7 @@ public class CommunicationInfoService {
 
     private final PersonService personService;
 
+
     private final CommunicationInfoRepository communicationInfoRepository;
 
     public CommunicationInfoService(@Lazy PersonService personService, CommunicationInfoRepository communicationInfoRepository) {
@@ -101,8 +102,10 @@ public class CommunicationInfoService {
             locationInfoModel.setPhoneNumberCount(phoneCount);
             locationInfoModelList.add(locationInfoModel);
 
+
             phoneCount = 0L;
         }
+
         return locationInfoModelList;
     }
 

@@ -52,7 +52,7 @@ public class CommunicationInfoController {
     }
 
     @GetMapping("/locationInfoModel")
-    public ResponseEntity<List<LocationInfoModel>> getPhoneNumberCount(){
+    public ResponseEntity<List<LocationInfoModel>> getLocationInfo(){
 
         return ResponseEntity.ok(communicationInfoService.getLocationInfo());
     }
